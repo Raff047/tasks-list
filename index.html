@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://kit.fontawesome.com/ba569ba24b.js" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100;200;300;400;600&display=swap"
+    rel="stylesheet">
+  <title>Todo's App</title>
+</head>
+
+<body>
+  <main class="container">
+    <header class="header">
+      <h1 class="header__title">What's up, <input type="text" id="name" placeholder="Lydia"></h1>
+      <p class="header__subtitle">What's on your todo?</p>
+
+      <form id="todo-form" class="header__form">
+
+        <input id="todo-input" type="text" placeholder="e.g Design UI for AlgCanExpress">
+
+        <p class="header__subtitle">Pick a category</p>
+        <div class="header__category">
+
+          <label class="header__category-box">
+            <input type="radio" name="category" id="category1" value="business">
+            <span class="icon business"></span>
+            <div>Business</div>
+          </label>
+
+          <label class="header__category-box">
+            <input type="radio" name="category" id="category2" value="personal">
+            <span class="icon personal"></span>
+            <div>Personal</div>
+          </label>
+
+        </div>
+
+        <input class="header__add-btn" type="submit" value="add todo" />
+      </form>
+
+    </header>
+    <section class="task-list-box">
+      <p class="task-list-box__subtitle">TODO LIST</p>
+      <ul id="task-list" class="task-list">
+        <li class="task-list__item">
+          <p>
+            <i class="fa-regular fa-circle"></i>
+            Learn Figma
+          </p>
+          <div class="control-btns">
+            <button class="btn edit-btn">Edit</button>
+            <button class="btn delete-btn">Delete</button>
+          </div>
+        </li>
+        <li class="task-list__item">
+          <p>
+            <i class="fa-regular fa-circle"></i>
+            Learn JS
+          </p>
+          <div class="control-btns">
+            <button class="btn edit-btn">Edit</button>
+            <button class="btn delete-btn">Delete</button>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+
+  <script type="module" src="src/main.js"></script>
+</body>
+
+</html>

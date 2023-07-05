@@ -1,0 +1,12 @@
+.container {
+	margin: 0 auto;
+	width: 96%;
+	padding: 2rem 4rem;
+}
+
+.header {
+	&__category {
+		display: flex;
+		gap: 2.6rem;
+	}
+}
