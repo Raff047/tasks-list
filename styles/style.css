@@ -29,6 +29,9 @@ body {
   color: var(--clr-light);
   font-family: 'Noto Sans Mono', monospace; }
 
+.edit-mode {
+  opacity: 0.5; }
+
 ul {
   list-style-type: none;
   padding: 0; }
