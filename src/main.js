@@ -1,19 +1,29 @@
 import '../styles/modern-normalize.css';
 import '../styles/style.css';
 
-// global scope variables (accessible to funtions)
+const nameInput = document.getElementById('name');
 const taskform = document.getElementById('todo-form');
 const taskInput = document.getElementById('todo-input');
 const taskList = document.getElementById('task-list');
 const clearAll = document.getElementById('clear');
 const addTaskBtn = taskform.querySelector('.header__add-btn');
 let isEditMode = false;
-const task = document.querySelectorAll('.task-list__item');
+
+function displayName() {
+	const username = localStorage.getItem('username');
+	nameInput.value = username;
+
+	nameInput.addEventListener('change', (e) => {
+		localStorage.setItem('username', e.target.value);
+	});
+}
 
 function displayTasks() {
 	const tasksFromStorage = getTasksFromStorage();
 
-	tasksFromStorage.forEach((task) => addTaskToDOM(task));
+	tasksFromStorage.forEach((task) => addTaskToDOM(task.task, task.category));
+
+	displayName();
 	checkUI();
 }
 
@@ -29,30 +39,48 @@ function onAddTaskSubmit(e) {
 
 	if (isEditMode) {
 		const taskToEdit = taskList.querySelector('.edit-mode');
-
-		deleteTaskFromStorage(taskToEdit.querySelector('p').textContent.trim());
+		const category = taskToEdit.querySelector('.icon').classList[1];
+		deleteTaskFromStorage(
+			taskToEdit.querySelector('label').textContent.trim(),
+			category
+		);
 
 		taskToEdit.classList.remove('edit-mode');
 		taskToEdit.remove();
 		isEditMode = false;
 	}
 
-	addTaskToDOM(newTask);
-	addTaskToStorage(newTask);
+	// Get the selected category
+	const selectedRadio = document.querySelector(
+		'input[name="category"]:checked'
+	);
+	const selectedCategory = selectedRadio ? selectedRadio.value : '';
+
+	if (selectedCategory === '') {
+		alert('Please select a category.');
+		return;
+	}
+
+	addTaskToDOM(newTask, selectedCategory);
+	addTaskToStorage(newTask, selectedCategory);
 
 	checkUI();
 	taskInput.value = '';
 }
 
-function addTaskToDOM(task) {
+function addTaskToDOM(task, category) {
 	// create a task
 	const li = document.createElement('li');
 	li.className = 'task-list__item';
-	const p = createP();
+	const label = createLabel();
+	const checkbox = createCheckbox();
+	const span = createSpan('icon');
 	const div = createDiv('control-btns');
-	const icon = createIcon('fa-regular fa-circle');
 
-	p.append(icon, document.createTextNode(' ' + task));
+	label.append(checkbox, span, document.createTextNode(' ' + task));
+
+	// Add category icon
+	span.classList.add(category);
 
 	const editBtn = createBTn('btn edit-btn');
 	editBtn.appendChild(document.createTextNode('Edit'));
@@ -61,15 +89,15 @@ function addTaskToDOM(task) {
 
 	div.append(editBtn, deleteBtn);
 
-	li.append(p, div);
+	li.append(label, div);
 
 	taskList.appendChild(li);
 }
 
-function addTaskToStorage(task) {
+function addTaskToStorage(task, category) {
 	const tasksFromStorage = getTasksFromStorage();
 
-	tasksFromStorage.push(task);
+	tasksFromStorage.push({ task, category });
 
 	localStorage.setItem('tasks', JSON.stringify(tasksFromStorage));
 }
@@ -85,15 +113,21 @@ function getTasksFromStorage() {
 	return tasksFromStorage;
 }
 
-function createP() {
-	const p = document.createElement('p');
-	return p;
+function createLabel() {
+	const label = document.createElement('label');
+	return label;
 }
 
-function createIcon(classes) {
-	const icon = document.createElement('i');
-	icon.className = classes;
-	return icon;
+function createCheckbox() {
+	const checkbox = document.createElement('input');
+	checkbox.type = 'checkbox';
+	return checkbox;
+}
+
+function createSpan(classes) {
+	const span = document.createElement('span');
+	span.classList.add(classes);
+	return span;
 }
 
 function createDiv(classes) {
@@ -108,38 +142,14 @@ function createBTn(classes) {
 	return button;
 }
 
-function deleteTask(e) {
-	if (e.target.classList.contains('delete-btn')) {
-		e.target.parentElement.parentElement.remove();
-	}
-	// TO BE VERIFIED
-	const task = e.target.parentElement.parentElement
-		.querySelector('p')
-		.textContent.trim();
-	deleteTaskFromStorage(task);
-	checkUI();
-}
-
-function deleteTaskFromStorage(task) {
+function deleteTaskFromStorage(taskText, category) {
 	let tasksFromStorage = getTasksFromStorage();
 
-	tasksFromStorage = tasksFromStorage.filter((t) => t !== task);
+	tasksFromStorage = tasksFromStorage.filter(
+		(task) => task.task !== taskText || task.category !== category
+	);
 
 	localStorage.setItem('tasks', JSON.stringify(tasksFromStorage));
-}
-
-function editTask(e) {
-	if (e.target.classList.contains('edit-btn')) {
-		isEditMode = true;
-		const task = e.target.parentElement.parentElement;
-		taskList
-			.querySelectorAll('li')
-			.forEach((t) => t.classList.remove('edit-mode'));
-		task.classList.add('edit-mode');
-		addTaskBtn.style.backgroundColor = '#60c689';
-		addTaskBtn.value = 'Update task';
-		taskInput.value = task.querySelector('p').textContent.trim();
-	}
 }
 
 function clear(e) {
@@ -170,10 +180,12 @@ function checkUI() {
 
 function onClickTask(e) {
 	const task = e.target.parentElement.parentElement;
+	const taskTextContent = task.querySelector('label').textContent.trim();
+	const category = task.querySelector('.icon').classList[1];
 	// delete
 	if (e.target.classList.contains('delete-btn')) {
+		deleteTaskFromStorage(taskTextContent.trim(), category);
 		task.remove();
-		deleteTaskFromStorage(task.querySelector('p').textContent.trim());
 		checkUI();
 	} else if (e.target.classList.contains('edit-btn')) {
 		// edit
@@ -186,7 +198,7 @@ function onClickTask(e) {
 		task.classList.add('edit-mode');
 		addTaskBtn.style.backgroundColor = '#60c689';
 		addTaskBtn.value = 'Update task';
-		taskInput.value = task.querySelector('p').textContent.trim();
+		taskInput.value = taskTextContent;
 	} else {
 		// done
 	}
@@ -196,7 +208,6 @@ function init() {
 	// Event Listeners
 	taskform.addEventListener('submit', onAddTaskSubmit);
 	taskList.addEventListener('click', onClickTask);
-	// taskList.addEventListener('click', editTask);
 	clearAll.addEventListener('click', clear);
 	document.addEventListener('DOMContentLoaded', displayTasks);
 	checkUI();

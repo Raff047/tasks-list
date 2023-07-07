@@ -16,7 +16,7 @@
 <body>
   <main class="container">
     <header class="header">
-      <h1 class="header__title">What's up, <input type="text" id="name" placeholder="Lydia"></h1>
+      <h1 class="header__title">What's up, <input type="text" id="name" placeholder="Lydia" autocomplete="off"></h1>
       <p class="header__subtitle">What's on your todo?</p>
 
       <form id="todo-form" class="header__form">
@@ -48,20 +48,14 @@
       <p class="task-list-box__subtitle">TODO LIST</p>
       <ul id="task-list" class="task-list">
         <!-- <li class="task-list__item">
-          <p>
-            <i class="fa-regular fa-circle"></i>
+
+          <label>
+            <input type="checkbox">
+            <span class="icon"></span>
             Learn Figma
-          </p>
-          <div class="control-btns">
-            <button class="btn edit-btn">Edit</button>
-            <button class="btn delete-btn">Delete</button>
-          </div>
-        </li>
-        <li class="task-list__item">
-          <p>
-            <i class="fa-regular fa-circle"></i>
-            Learn JS
-          </p>
+          </label>
+
+
           <div class="control-btns">
             <button class="btn edit-btn">Edit</button>
             <button class="btn delete-btn">Delete</button>
