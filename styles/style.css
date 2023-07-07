@@ -32,6 +32,10 @@ body {
 .edit-mode {
   opacity: 0.5; }
 
+.done {
+  text-decoration: line-through;
+  opacity: 0.3; }
+
 ul {
   list-style-type: none;
   padding: 0; }
@@ -135,11 +139,11 @@ a:hover {
 
 .header__title {
   font-size: 2.8rem;
-  margin-bottom: 2rem; }
+  margin-bottom: 2rem;
+  white-space: nowrap; }
   .header__title input {
-    display: inline;
-    min-width: 0;
-    background: none; }
+    background: none;
+    font-weight: 700; }
 
 .header__subtitle {
   font-size: 1.4rem;
@@ -189,6 +193,12 @@ a:hover {
     margin: 1rem 0;
     padding: 0.8rem 1.2rem;
     transition: color 0.3s;
-    cursor: pointer; }
+    cursor: pointer;
+    word-break: break-word; }
+    .task-list-box .task-list__item .icon {
+      margin-right: 1.2rem;
+      flex-shrink: 0; }
+  .task-list-box .task-list .control-btns {
+    white-space: nowrap; }
   .task-list-box .task-list__item:hover {
     background-color: #4d4d4d; }

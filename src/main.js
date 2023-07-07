@@ -179,7 +179,8 @@ function checkUI() {
 }
 
 function onClickTask(e) {
-	const task = e.target.parentElement.parentElement;
+	// const task = e.target.parentElement.parentElement;
+	const task = e.target.closest('.task-list__item');
 	const taskTextContent = task.querySelector('label').textContent.trim();
 	const category = task.querySelector('.icon').classList[1];
 	// delete
@@ -201,6 +202,13 @@ function onClickTask(e) {
 		taskInput.value = taskTextContent;
 	} else {
 		// done
+		if (!e.target.classList.contains('done')) {
+			e.target.classList.toggle('done');
+			deleteTaskFromStorage(taskTextContent, category);
+		} else {
+			e.target.classList.toggle('done');
+			addTaskToStorage(taskTextContent, category);
+		}
 	}
 }
 
