@@ -2,6 +2,8 @@
 
 The Tasks List App is a simple web application that allows users to create and manage their tasks in an organized manner. Users can add tasks, mark them as done, edit task details, and delete tasks. The app also supports categorizing tasks into business and personal categories for better organization.
 
+![Screenshot 1](https://github.com/Raff047/tasks-list/blob/main/Screenshot.png?raw=true)
+
 ### Features
 
 - Add tasks: Users can enter task details and add them to the task list.
